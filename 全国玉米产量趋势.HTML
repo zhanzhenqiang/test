@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>全国玉米年均增长趋势</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+
+    <!-- mapbox-gl -->
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css" rel="stylesheet" />
+	<!-- echart-->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@3.8.5/dist/echarts.js"></script>
+  
+</head>
+<body>
+<div style=" width: 100%;
+  height: 100%;
+  position: absolute;" id="thematicMapDiv"></div> 
+<script>
+//数据为模拟数据，仅供参考
+window.onload=function(){
+	addBasicMap();
+	//专题数据
+	window.thematicdata=[{"XZQH":"110000","BZ3":-9.3278,"XZQHMC":"北京市","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [116.3979471, 39.9081726]}}"},
+{"XZQH":"140000","BZ3":11.664,"XZQHMC":"山西省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [112.5223053, 37.8357424]}}"},
+{"XZQH":"360000","BZ3":1.2107,"XZQHMC":"江西省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [115.8999176, 28.6759911]}}"},
+{"XZQH":"120000","BZ3":2.734,"XZQHMC":"天津市","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [117.2523808, 39.1038561]}}"},
+{"XZQH":"130000","BZ3":58.327,"XZQHMC":"河北省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [114.4897766, 38.0451279]}}"},
+{"XZQH":"150000","BZ3":-94.672,"XZQHMC":"内蒙古自治区","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [111.6632996, 40.8209419]}}"},
+{"XZQH":"210000","BZ3":65.595,"XZQHMC":"辽宁省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [123.4116821, 41.7966156]}}"},
+{"XZQH":"220000","BZ3":75.049,"XZQHMC":"吉林省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [125.3154297, 43.8925629]}}"},
+{"XZQH":"230000","BZ3":148.84,"XZQHMC":"黑龙江省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [126.6433411, 45.7414932]}}"},
+{"XZQH":"310000","BZ3":0.3148,"XZQHMC":"上海省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [121.4692688, 31.2381763]}}"},
+{"XZQH":"320000","BZ3":13.62,"XZQHMC":"江苏省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [118.7727814, 32.0476151]}}"},
+{"XZQH":"330000","BZ3":0.5913,"XZQHMC":"浙江省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [117.0056, 36.6670723]}}"},
+{"XZQH":"340000","BZ3":38.882,"XZQHMC":"安徽省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [117.2757034, 31.8632545]}}"},
+{"XZQH":"350000","BZ3":-0.4437,"XZQHMC":"福建省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [119.2978134, 26.0785904]}}"},
+{"XZQH":"370000","BZ3":100.78,"XZQHMC":"山东省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [117.0056, 36.6670723]}}"},
+{"XZQH":"410000","BZ3":-44.727,"XZQHMC":"河南省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [113.6500473, 34.7570343]}}"},
+{"XZQH":"420000","BZ3":6.3897,"XZQHMC":"湖北省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [114.2919388, 30.5675144]}}"},
+{"XZQH":"430000","BZ3":4.2373,"XZQHMC":"湖南省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [112.9812698, 28.2008247]}}"},
+{"XZQH":"440000","BZ3":-3.8625,"XZQHMC":"广东省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [113.2614288, 23.1189117]}}"},
+{"XZQH":"450000","BZ3":2.7725,"XZQHMC":"广西壮族自治区","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [108.3117676, 22.8065434]}}"},
+{"XZQH":"510000","BZ3":57.666,"XZQHMC":"四川省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [104.0817566, 30.6610565]}}"},
+{"XZQH":"520000","BZ3":-6.2353,"XZQHMC":"贵州省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [106.7113724, 26.5768738]}}"},
+{"XZQH":"530000","BZ3":42.873,"XZQHMC":"云南省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [102.704567, 25.0438442]}}"},
+{"XZQH":"540000","BZ3":0.082,"XZQHMC":"西藏自治区","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [91.1320496, 29.657589]}}"},
+{"XZQH":"500000","BZ3":-1.0117,"XZQHMC":"重庆市","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [106.548425, 29.5549144]}}"},
+{"XZQH":"610000","BZ3":6.8713,"XZQHMC":"陕西省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [108.949028, 34.2616844]}}"},
+{"XZQH":"620000","BZ3":18.07,"XZQHMC":"甘肃省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [103.7500534, 36.0680389]}}"},
+{"XZQH":"630000","BZ3":-0.719,"XZQHMC":"青海省","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [101.7874527, 36.6094475]}}"},
+{"XZQH":"640000","BZ3":7.8697,"XZQHMC":"宁夏回族自治区","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [106.2719421, 38.4680099]}}"},
+{"XZQH":"650000","BZ3":48.173,"XZQHMC":"新疆维吾尔自治区","BZ2":0,"GEOJSON":"{\"type\": \"Feature\",\"properties\": {},\"geometry\": {\"type\": \"Point\",\"coordinates\": [87.6061172, 43.7909393]}}"}
+];
+	window.thematicHeader={"XZQH":"行政区划","BZ3":"","XZQHMC":"行政区划名称","BZ2":"","GEOJSON":"坐标"};
+	//需要清理的对象
+	 window.echartMapPoints=[];
+	 window.echartInitLists=[];
+	
+	addThematicEchartLayer();
+	
+}
+//加载底图
+function addBasicMap(){
+  //这个可以自己去mapboxgl官网申请key
+  mapboxgl.accessToken =
+      "pk.eyJ1IjoieWFuZ3pob3VoYW8iLCJhIjoiY2ppbG9sMXJnMXc5YjNxbnhrOWl1bXppMyJ9.-JL3W32NYV_lHqsTUIGw9Q";
+    window.map = new mapboxgl.Map({
+      container: "thematicMapDiv",
+      style: "mapbox://styles/mapbox/streets-v11",
+       center: [117.9, 33.5],
+       zoom: 4
+    });
+}
+
+//加载专题地图
+function addThematicEchartLayer() {
+      //销毁echartLists
+      clearEchartInstantAndPoint();
+	  //专题数据处理及加载到地图
+      window.thematicdata.forEach(element => {
+        var geojson = JSON.parse(element.GEOJSON);
+        var el1 = document.createElement("div");
+        el1.id = "thematicchart" + element.XZQH;
+        el1.style = "height:100px;width:100px;";
+        window.echartMapPoints.push( new mapboxgl.Marker(el1, { offset: [-50 / 2, -50 / 2] })
+          .setLngLat([
+            geojson.geometry.coordinates[0],
+            geojson.geometry.coordinates[1]
+          ])
+          .addTo(window.map));
+		  //echart初始化专题图
+		  addEchartInit(element);
+	
+})}
+
+//echart初始化专题图
+function addEchartInit(element){
+		var data = [];
+        Object.keys(window.thematicHeader).forEach(key => {
+          if (key.indexOf("BZ") != -1) {
+            data.push({ name: element[key], value: element[key] });
+          }
+          });
+        var option1 = {
+            tooltip : {
+            trigger: 'item',
+            formatter: "{a}<br/>玉米年均增长量 : {c} 吨"
+          },
+          series: {
+            name:element.XZQHMC,
+            type: "pie",
+            data: data,
+            radius: "30%",
+            center: ["30%", "30%"],
+            label: {
+              normal: {
+                position: "inner",
+                fontSize:5
+              },
+              
+            }
+          }
+        };
+		window.echartInitLists.push(initEchart("thematicchart" + element.XZQH, option1));
+   
+		
+}
+//初始化echart表
+function initEchart(id,options){
+  var mychart = echarts.init(document.getElementById(id));
+  mychart.setOption(options);
+  return mychart;
+}
+
+//清除echart及marker
+function clearEchartInstantAndPoint(){
+		window.echartInitLists.forEach(echartItem => {
+                  echartItem.dispose();
+          });
+        window.echartMapPoints.forEach(pointItem => {
+            pointItem.remove();
+          });
+}
+</script>
+</body>
+</html>
+
+
